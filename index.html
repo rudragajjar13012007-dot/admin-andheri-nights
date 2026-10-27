@@ -1,0 +1,890 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Andheri Nights Halloween – Pass desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+<style>
+:root{
+  color-scheme: light;
+  --bg:#EDE3E1; --surface:#F7F0EF; --raise:#E2D3D1; --ink:#1A0606; --muted:#6B4846; --line:#CDB4B1;
+  --accent:#9B0F17; --accent-ink:#FFFFFF; --ok:#22744A; --bad:#7A0A10; --warn:#8A5A0E; --warn-bg:#EBD9B4;
+  --fog:rgba(155,15,23,.10); --ghost:rgba(110,0,0,.13); --glow:rgba(155,15,23,.4);
+  --display:"Creepster", "Iowan Old Style", Georgia, serif;
+  --body:"Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --bg:#080303; --surface:#140808; --raise:#1F0C0C; --ink:#F2E4E1; --muted:#A3817E; --line:#3A1515;
+    --accent:#E0141F; --accent-ink:#FFFFFF; --ok:#4FBF7E; --bad:#B0060E; --warn:#F2C14E; --warn-bg:#33200F;
+    --fog:rgba(140,8,14,.20); --ghost:rgba(255,215,215,.10); --glow:rgba(224,20,31,.6);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --bg:#080303; --surface:#140808; --raise:#1F0C0C; --ink:#F2E4E1; --muted:#A3817E; --line:#3A1515;
+  --accent:#E0141F; --accent-ink:#FFFFFF; --ok:#4FBF7E; --bad:#B0060E; --warn:#F2C14E; --warn-bg:#33200F;
+  --fog:rgba(140,8,14,.20); --ghost:rgba(255,215,215,.10); --glow:rgba(224,20,31,.6);
+}
+:root{ box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px); }
+*,*::before,*::after{ box-sizing:inherit; }
+html{ scroll-padding-top:env(safe-area-inset-top,0px); }
+body{ margin:0; background:var(--bg); color:var(--ink); font-family:var(--body); font-size:16px; line-height:1.45; -webkit-font-smoothing:antialiased; }
+main{ position:relative; z-index:1; }
+.drips{ position:absolute; left:0; top:100%; width:100%; height:44px; color:var(--accent); pointer-events:none; filter:drop-shadow(0 0 6px var(--glow)); }
+.drop{ position:absolute; width:6px; height:9px; background:var(--accent); border-radius:50% 50% 50% 50% / 65% 65% 35% 35%; pointer-events:none; opacity:0; animation:fall 5s cubic-bezier(.55,0,1,.45) infinite; }
+@keyframes fall{ 0%,55%{ transform:translateY(0) scaleY(.6); opacity:0; } 60%{ opacity:1; transform:translateY(0) scaleY(1); } 100%{ transform:translateY(70vh) scaleY(1.4); opacity:0; } }
+.verdict.bad{ box-shadow:0 0 40px var(--glow); }
+@media (prefers-reduced-motion: reduce){ .drop{ display:none; } }
+body::before{ content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px); z-index:10; background:var(--bg); }
+button,input,select,textarea{ font:inherit; color:inherit; }
+button{ cursor:pointer; }
+:focus-visible{ outline:3px solid var(--accent); outline-offset:2px; }
+[hidden]{ display:none !important; }
+
+.wrap{ max-width:1120px; margin:0 auto; padding:0 20px; }
+
+/* Header */
+.top{ position:sticky; top:env(safe-area-inset-top,0px); z-index:5; background:var(--bg); }
+.top .wrap{ display:flex; align-items:flex-end; justify-content:space-between; gap:16px; padding-top:14px; flex-wrap:wrap; }
+.brand h1{ font-family:var(--display); font-weight:400; font-size:clamp(2.2rem, 6vw, 3.4rem); line-height:.9; margin:0 0 12px; letter-spacing:.03em; color:var(--accent); text-shadow:0 0 18px var(--glow); }
+.brand p{ margin:4px 0 12px; color:var(--muted); font-size:.95rem; }
+.tabs{ display:flex; gap:4px; }
+.tabs button{ background:none; border:0; padding:10px 16px 12px; font-weight:600; color:var(--muted); border-bottom:3px solid transparent; }
+.tabs button[aria-current="page"]{ color:var(--ink); border-bottom-color:var(--accent); }
+
+main{ padding:64px 0 60px; }
+.notice{ background:var(--warn-bg); color:var(--ink); border-left:4px solid var(--warn); padding:12px 14px; border-radius:6px; margin-bottom:16px; }
+
+/* Stats */
+.stats{ display:flex; flex-wrap:wrap; gap:8px 28px; margin:0 0 18px; padding:0; list-style:none; }
+.stats li{ display:flex; flex-direction:column; }
+.stats b{ font-size:1.6rem; font-weight:700; font-variant-numeric:tabular-nums; line-height:1.1; }
+.stats span{ color:var(--muted); font-size:.85rem; }
+.stats .hot b{ color:var(--accent); }
+
+.syncbar{ display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center; font-size:.9rem; color:var(--muted); margin:-4px 0 16px; }
+.syncbar a{ color:var(--accent); font-weight:600; text-underline-offset:3px; }
+
+/* Toolbar */
+.toolbar{ display:grid; grid-template-columns:1fr; gap:10px; margin-bottom:14px; }
+.toolbar .field{ width:100%; min-width:0; }
+.tbtns{ display:flex; gap:8px; }
+.tbtns .btn{ flex:1; padding:10px 12px; }
+@media (min-width:760px){
+  .toolbar{ grid-template-columns:minmax(0,1fr) 190px auto; align-items:center; }
+  .tbtns .btn{ flex:none; }
+}
+.field{ background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:10px 12px; }
+.btn{ border:1px solid transparent; border-radius:8px; padding:10px 16px; font-weight:600; background:var(--accent); color:var(--accent-ink); white-space:nowrap; }
+.btn.ghost{ background:transparent; border-color:var(--line); color:var(--ink); }
+.btn.small{ padding:6px 10px; font-size:.88rem; }
+.btn:disabled{ opacity:.45; cursor:not-allowed; }
+.spacer{ flex:1; }
+
+/* Sheet */
+.sheet{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; background:var(--surface); }
+table{ width:100%; border-collapse:collapse; min-width:760px; font-variant-numeric:tabular-nums; }
+th,td{ text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:middle; }
+th{ font-size:.82rem; font-weight:600; color:var(--muted); background:var(--raise); position:sticky; top:0; }
+tbody tr:last-child td{ border-bottom:0; }
+tbody tr:hover{ background:color-mix(in srgb, var(--raise) 55%, transparent); }
+td.num,th.num{ text-align:right; }
+.code{ font-weight:700; letter-spacing:.08em; }
+.sub{ color:var(--muted); font-size:.85rem; }
+td.who{ cursor:pointer; }
+.dots{ letter-spacing:2px; color:var(--accent); margin-right:6px; }
+.pay{ border:1px solid var(--line); background:transparent; border-radius:999px; padding:4px 12px; font-size:.85rem; font-weight:600; }
+.pay.is-paid{ background:color-mix(in srgb, var(--ok) 16%, transparent); border-color:transparent; color:var(--ok); }
+.pay.is-pending{ background:var(--warn-bg); border-color:transparent; color:var(--warn); }
+.acts{ display:flex; gap:6px; justify-content:flex-end; }
+.empty{ padding:40px 20px; text-align:center; color:var(--muted); }
+
+/* Gate */
+.gate{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:20px; align-items:start; }
+@media (max-width:760px){ .gate{ grid-template-columns:1fr; } }
+.cam{ background:#000; border-radius:12px; aspect-ratio:1/1; position:relative; overflow:hidden; display:grid; place-items:center; }
+.cam video{ width:100%; height:100%; object-fit:cover; }
+.cam .frame{ position:absolute; inset:18%; border:3px solid rgba(255,255,255,.85); border-radius:16px; pointer-events:none; }
+.cam .camoff{ color:#cbbfcf; text-align:center; padding:20px; position:absolute; inset:0; display:grid; place-content:center; gap:12px; }
+.manual{ display:flex; gap:8px; margin-top:12px; }
+.manual input{ flex:1; min-width:0; text-transform:uppercase; letter-spacing:.12em; font-weight:700; }
+
+.verdict{ border-radius:14px; background:var(--surface); border:1px solid var(--line); padding:24px; min-height:280px; display:flex; flex-direction:column; gap:12px; }
+.verdict .big{ font-family:var(--display); font-size:clamp(3.2rem, 11vw, 5.5rem); line-height:.95; margin:0; }
+.verdict .who{ font-size:1.35rem; font-weight:700; }
+.verdict .meta{ color:inherit; opacity:.85; }
+.verdict .row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:auto; }
+.verdict.ok{ background:var(--ok); color:#fff; border-color:transparent; }
+.verdict.bad{ background:var(--bad); color:#fff; border-color:transparent; }
+.verdict.ok .btn, .verdict.bad .btn{ background:#fff; color:#1b1b1b; }
+.verdict.ok .btn.ghost, .verdict.bad .btn.ghost{ background:transparent; color:#fff; border-color:rgba(255,255,255,.6); }
+.verdict.flash{ animation:pop .28s ease-out; }
+@keyframes pop{ from{ transform:scale(.96); opacity:.6; } to{ transform:none; opacity:1; } }
+@media (prefers-reduced-motion: reduce){ .verdict.flash{ animation:none; } }
+.left{ font-family:var(--display); font-size:4.5rem; line-height:1; color:var(--accent); }
+.warnline{ background:var(--warn-bg); color:var(--warn); border-radius:8px; padding:8px 12px; font-weight:600; }
+.letin{ display:flex; flex-wrap:wrap; gap:8px; }
+.letin .btn{ font-size:1.05rem; padding:14px 18px; }
+.recent{ margin-top:20px; }
+.recent h2{ font-size:1rem; margin:0 0 8px; }
+.recent ol{ list-style:none; margin:0; padding:0; border:1px solid var(--line); border-radius:10px; background:var(--surface); }
+.recent li{ display:flex; gap:12px; padding:9px 12px; border-bottom:1px solid var(--line); font-variant-numeric:tabular-nums; }
+.recent li:last-child{ border-bottom:0; }
+.recent .t{ color:var(--muted); width:72px; flex:none; }
+.recent .n{ margin-left:auto; font-weight:700; color:var(--ok); }
+
+/* Dialogs */
+dialog{ border:1px solid var(--line); background:var(--surface); color:var(--ink); border-radius:14px; padding:0; width:min(520px, calc(100% - 24px)); max-height:calc(100% - 24px); }
+dialog::backdrop{ background:rgba(12,6,14,.6); }
+.dlg{ padding:22px; display:flex; flex-direction:column; gap:14px; }
+.dlg h2{ margin:0; font-family:var(--display); font-weight:400; font-size:2rem; line-height:1; }
+.grid2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+@media (max-width:460px){ .grid2{ grid-template-columns:1fr; } }
+label{ display:flex; flex-direction:column; gap:5px; font-size:.88rem; font-weight:600; color:var(--muted); }
+label .field{ color:var(--ink); font-weight:400; font-size:1rem; }
+.check{ flex-direction:row; align-items:center; gap:8px; color:var(--ink); font-weight:500; font-size:1rem; }
+.check input{ width:20px; height:20px; accent-color:var(--accent); }
+.dlg-foot{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.err{ color:var(--bad); font-weight:600; margin:0; }
+.passimg{ width:100%; border-radius:10px; display:block; background:var(--raise); aspect-ratio:1080/1350; }
+textarea.field{ resize:vertical; min-height:96px; font-size:.9rem; }
+.types-row{ display:grid; grid-template-columns:2fr 1fr 1fr auto; gap:8px; align-items:end; }
+.hint{ color:var(--muted); font-size:.85rem; margin:0; }
+.field[readonly]{ opacity:.7; cursor:not-allowed; }
+
+@media (max-width:759px){
+  .sheet{ overflow:visible; }
+  table{ min-width:0; }
+  thead{ display:none; }
+  table, tbody, tr, td{ display:block; }
+  tbody tr{ display:grid; grid-template-columns:minmax(0,1fr) auto; gap:4px 12px; padding:14px; border-bottom:1px solid var(--line); }
+  tbody tr:last-child{ border-bottom:0; }
+  tbody td{ border:0; padding:0; }
+  tbody td:nth-child(2){ grid-column:1; grid-row:1; font-size:1.05rem; }
+  tbody td:nth-child(1){ grid-column:2; grid-row:1; text-align:right; }
+  tbody td:nth-child(3){ grid-column:1; grid-row:2; color:var(--muted); }
+  tbody td:nth-child(5){ grid-column:2; grid-row:2; text-align:right; }
+  tbody td:nth-child(4){ grid-column:1; grid-row:3; color:var(--muted); }
+  tbody td:nth-child(6){ grid-column:2; grid-row:3; text-align:right; }
+  tbody td:nth-child(7){ grid-column:1; grid-row:4; margin-top:6px; }
+  tbody td:nth-child(8){ grid-column:2; grid-row:4; margin-top:6px; }
+  tbody td.num .sub{ display:none; }
+  .manual input{ letter-spacing:.04em; }
+}
+.manual input::placeholder{ text-transform:none; letter-spacing:0; }
+.dlg-foot .btn{ flex:0 0 auto; }
+main.wrap{ padding-top:64px; padding-bottom:60px; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="gh" viewBox="0 0 100 120"><path fill="currentColor" d="M50 4C25 4 10 24 10 50V114L23 104L36 114L50 104L64 114L77 104L90 114V50C90 24 75 4 50 4Z"/><ellipse cx="37" cy="48" rx="6" ry="8" fill="var(--bg)"/><ellipse cx="63" cy="48" rx="6" ry="8" fill="var(--bg)"/><ellipse cx="50" cy="74" rx="6" ry="9" fill="var(--bg)"/></symbol></svg>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <h1>Andheri Nights</h1>
+    </div>
+    <nav class="tabs" aria-label="Views">
+      <button type="button" data-view="passes">Passes</button>
+      <button type="button" data-view="gate">Gate</button>
+    </nav>
+  </div>
+  <svg class="drips" viewBox="0 0 1200 44" preserveAspectRatio="none" aria-hidden="true"><path fill="currentColor" d="M0 0H1200V6H1143C1141 6 1138.0 16 1135.0 16C1132.0 16 1129 6 1127 6H1082C1080 6 1078.5 16 1075.5 16C1072.5 16 1071 6 1069 6H936C934 6 930.0 27 927.0 27C924.0 27 920 6 918 6H848C846 6 846.0 40 843.0 40C840.0 40 840 6 838 6H797C795 6 790.5 17 787.5 17C784.5 17 780 6 778 6H706C704 6 702.5 34 699.5 34C696.5 34 695 6 693 6H489C487 6 482.0 32 479.0 32C476.0 32 471 6 469 6H348C346 6 346.0 32 343.0 32C340.0 32 340 6 338 6H241C239 6 234.5 26 231.5 26C228.5 26 224 6 222 6H216C214 6 214.0 21 211.0 21C208.0 21 208 6 206 6H188C186 6 186.0 31 183.0 31C180.0 31 180 6 178 6H160C158 6 157.0 23 154.0 23C151.0 23 150 6 148 6H144C142 6 139.0 18 136.0 18C133.0 18 130 6 128 6H124C122 6 118.0 17 115.0 17C112.0 17 108 6 106 6H0Z"/></svg>
+</header>
+
+<main class="wrap">
+  <div id="notice" class="notice">Loading passes…</div>
+
+  <section id="view-passes" aria-label="Passes">
+    <ul class="stats" id="stats"></ul>
+    <div class="syncbar">
+      <span id="syncText">Checking Google Sheet connection…</span>
+      <button type="button" class="btn ghost small" id="syncBtn" hidden>Connect Google Sheet</button>
+      <a id="sheetLink" target="_blank" rel="noopener" href="https://docs.google.com/spreadsheets/d/1k_epkQQmgT4yiGiPwJbrr7L-kSzBFa4_Av6B2r6QJ4o/edit">Open Google Sheet</a>
+      <a target="_blank" rel="noopener" href="https://docs.google.com/spreadsheets/d/1cAnt7xpVQ9-gB4Xe8OTfYe8q3qnL7Oso_WykYiyHN5A/edit">Open guest list</a>
+    </div>
+    <div class="toolbar">
+      <input id="q" type="search" class="field" placeholder="Search name, phone or pass code" aria-label="Search passes">
+      <select id="filter" class="field" aria-label="Filter passes">
+        <option value="all">All passes</option>
+        <option value="pending">Payment pending</option>
+        <option value="notin">Not arrived yet</option>
+        <option value="in">Arrived</option>
+      </select>
+      <div class="tbtns">
+        <button type="button" class="btn ghost" id="typesBtn" disabled>Pass types</button>
+        <button type="button" class="btn ghost" id="csvBtn" disabled>Export CSV</button>
+        <button type="button" class="btn" id="addBtn" disabled>Add buyer</button>
+      </div>
+    </div>
+    <div class="sheet">
+      <table>
+        <thead><tr>
+          <th>Pass code</th><th>Name</th><th>Phone</th><th>Type</th><th>Entries</th><th class="num">Amount</th><th>Payment</th><th></th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <div id="empty" class="empty" hidden></div>
+    </div>
+  </section>
+
+  <section id="view-gate" aria-label="Gate" hidden>
+    <div class="gate">
+      <div>
+        <div class="cam">
+          <video id="video" playsinline muted hidden></video>
+          <div class="frame" id="frame" hidden></div>
+          <div class="camoff" id="camoff">
+            <span>Point the camera at the guest’s pass QR.</span>
+            <button type="button" class="btn" id="camBtn">Start camera</button>
+          </div>
+        </div>
+        <form class="manual" id="manual" autocomplete="off">
+          <input class="field" id="codeIn" maxlength="12" placeholder="Or type pass code" aria-label="Pass code">
+          <button class="btn" type="submit">Check pass</button>
+        </form>
+        <canvas id="scanCanvas" hidden></canvas>
+      </div>
+      <div>
+        <div class="verdict" id="verdict"></div>
+        <div class="recent">
+          <h2>Latest entries</h2>
+          <ol id="recent"></ol>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<dialog id="buyerDlg" aria-labelledby="buyerTitle">
+  <form class="dlg" id="buyerForm" method="dialog" autocomplete="off">
+    <h2 id="buyerTitle">Add buyer</h2>
+    <label>Name<input class="field" name="name" required maxlength="60"></label>
+    <div class="grid2">
+      <label>Phone (WhatsApp)<input class="field" name="phone" inputmode="tel" maxlength="16"></label>
+      <label>Pass type<select class="field" name="type" id="typeSel"></select></label>
+    </div>
+    <div class="grid2">
+      <label>Entries on this pass<input class="field" name="allowed" type="number" min="1" max="50" value="1" required></label>
+      <label>Price (₹)<input class="field" name="amount" type="number" min="0" step="1" value="0"></label>
+    </div>
+    <div class="grid2">
+      <label>UPI / payment ref<input class="field" name="upi" maxlength="40"></label>
+      <label>Note<input class="field" name="note" maxlength="80"></label>
+    </div>
+    <label class="check"><input type="checkbox" name="paid"> Payment verified</label>
+    <p class="err" id="buyerErr" hidden></p>
+    <div class="dlg-foot">
+      <button class="btn" type="submit" id="buyerSave">Save buyer</button>
+      <button class="btn ghost" type="button" data-close>Cancel</button>
+      <span class="spacer"></span>
+      <button class="btn ghost" type="button" id="delBtn" hidden>Delete pass</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="passDlg" aria-labelledby="passTitle">
+  <div class="dlg">
+    <h2 id="passTitle">Pass</h2>
+    <img id="passImg" class="passimg" alt="Pass with QR code">
+    <div class="dlg-foot">
+      <button class="btn" type="button" id="savePassBtn">Save pass image</button>
+      <a class="btn ghost" id="waLink" target="_blank" rel="noopener">Open WhatsApp</a>
+    </div>
+    <textarea class="field" id="waText" readonly aria-label="Message for the buyer"></textarea>
+    <div class="dlg-foot"><button class="btn ghost" type="button" data-close>Done</button></div>
+  </div>
+</dialog>
+
+<dialog id="typesDlg" aria-labelledby="typesTitle">
+  <form class="dlg" id="typesForm" method="dialog">
+    <h2 id="typesTitle">Pass types</h2>
+    <div id="typesRows" style="display:flex;flex-direction:column;gap:10px"></div>
+    <button class="btn ghost small" type="button" id="addTypeBtn" style="align-self:flex-start">Add type</button>
+    <div class="dlg-foot">
+      <button class="btn" type="submit">Save pass types</button>
+      <button class="btn ghost" type="button" data-close>Cancel</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+(function(){
+  "use strict";
+  var DEFAULT_TYPES = [
+    { name: "Solo", people: 1, price: 599 },
+    { name: "Couple", people: 2, price: 1150 },
+    { name: "Group of 5", people: 5, price: 2800 },
+    { name: "Group of 10", people: 10, price: 5300 }
+  ];
+  var QR_PREFIX = "ANHW:";
+  var S = { db: null, downloads: null, passes: [], types: DEFAULT_TYPES.slice(), q: "", filter: "all",
+            editing: null, gateCode: null, lastAdmit: null, readOnly: false, scanning: false, stream: null, busy: false };
+
+  var deviceId = null;
+  try { deviceId = localStorage.getItem("an-device"); } catch (e) {}
+  if (!deviceId) { deviceId = "d" + Math.random().toString(36).slice(2, 10); try { localStorage.setItem("an-device", deviceId); } catch (e) {} }
+
+  function $(s){ return document.querySelector(s); }
+  function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function rupee(n){ return "₹" + Number(n || 0).toLocaleString("en-IN"); }
+  function timeOf(t){ return t ? new Date(t).toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit" }) : ""; }
+  function notice(msg){ var n = $("#notice"); if (!msg) { n.hidden = true; return; } n.textContent = msg; n.hidden = false; }
+  function writeFailed(e){
+    if (e && e.code === "invalid_argument") { S.readOnly = true; setEnabled(); notice("You can see the passes but can’t change them. Ask the page owner to give you Contributor access."); }
+    else if (e && e.code === "quota_exceeded") notice("The pass list is full. Delete old or test passes to add more.");
+    else notice("That change didn’t save. Check your connection and try again.");
+  }
+
+  /* ---------- Views ---------- */
+  function showView(v){
+    $("#view-passes").hidden = v !== "passes";
+    $("#view-gate").hidden = v !== "gate";
+    document.querySelectorAll(".tabs button").forEach(function(b){
+      if (b.dataset.view === v) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current");
+    });
+    if (v !== "gate") stopCam();
+    if (v === "gate" && !S.gateCode) idleVerdict();
+  }
+  document.querySelectorAll(".tabs button").forEach(function(b){
+    b.addEventListener("click", function(){ try { location.hash = b.dataset.view; } catch (e) {} showView(b.dataset.view); });
+  });
+  window.addEventListener("hashchange", function(){ showView(location.hash.slice(1) === "gate" ? "gate" : "passes"); });
+
+  function setEnabled(){
+    var ok = !!S.db && !S.readOnly;
+    $("#addBtn").disabled = !ok;
+    $("#typesBtn").disabled = !ok;
+    $("#csvBtn").disabled = !S.downloads || !S.passes.length;
+    $("#csvBtn").hidden = !S.downloads;
+  }
+
+  /* ---------- Passes sheet ---------- */
+  function filtered(){
+    var q = S.q.trim().toLowerCase();
+    return S.passes.slice().sort(function(a, b){ return (b.createdAt || 0) - (a.createdAt || 0); }).filter(function(p){
+      if (q && (p.name || "").toLowerCase().indexOf(q) < 0 && (p.phone || "").indexOf(q) < 0 && p.code.toLowerCase().indexOf(q) < 0) return false;
+      if (S.filter === "pending") return !p.paid;
+      if (S.filter === "notin") return !(p.used > 0);
+      if (S.filter === "in") return p.used > 0;
+      return true;
+    });
+  }
+  function dots(used, allowed){
+    if (allowed > 8) return "";
+    var s = ""; for (var i = 0; i < allowed; i++) s += i < used ? "●" : "○";
+    return '<span class="dots" aria-hidden="true">' + s + "</span>";
+  }
+  function renderStats(){
+    var people = 0, inside = 0, cash = 0, pending = 0;
+    S.passes.forEach(function(p){ people += +p.allowed || 0; inside += +p.used || 0; if (p.paid) cash += +p.amount || 0; else pending++; });
+    $("#stats").innerHTML =
+      "<li><b>" + S.passes.length + "</b><span>Passes sold</span></li>" +
+      "<li><b>" + people + "</b><span>People expected</span></li>" +
+      '<li class="hot"><b>' + inside + "</b><span>Inside now</span></li>" +
+      "<li><b>" + rupee(cash) + "</b><span>Collected (verified)</span></li>" +
+      "<li><b>" + pending + "</b><span>Payments to verify</span></li>";
+  }
+  function renderRows(){
+    var list = filtered();
+    $("#rows").innerHTML = list.map(function(p){
+      var used = +p.used || 0, allowed = +p.allowed || 1;
+      return '<tr data-code="' + esc(p.code) + '">' +
+        '<td><span class="code">' + esc(p.code) + "</span></td>" +
+        '<td class="who" data-act="edit"><strong>' + esc(p.name) + "</strong>" + (p.note ? '<div class="sub">' + esc(p.note) + "</div>" : "") + "</td>" +
+        "<td>" + esc(p.phone) + "</td>" +
+        "<td>" + esc(p.type) + "</td>" +
+        "<td>" + dots(used, allowed) + used + " / " + allowed + "</td>" +
+        '<td class="num">' + rupee(p.amount) + (p.upi ? '<div class="sub">' + esc(p.upi) + "</div>" : "") + "</td>" +
+        '<td><button type="button" class="pay ' + (p.paid ? "is-paid" : "is-pending") + '" data-act="pay"' + (S.readOnly ? " disabled" : "") + ">" + (p.paid ? "Verified" : "Pending") + "</button></td>" +
+        '<td><div class="acts"><button type="button" class="btn small" data-act="pass">Pass</button>' +
+        (S.readOnly ? "" : "") + "</div></td></tr>";
+    }).join("");
+    var empty = $("#empty");
+    if (!S.db) { empty.hidden = true; return; }
+    if (!S.passes.length) { empty.textContent = "No passes yet. Add your first buyer to create their pass and QR."; empty.hidden = false; }
+    else if (!list.length) { empty.textContent = "No passes match this search or filter."; empty.hidden = false; }
+    else empty.hidden = true;
+  }
+  function renderAll(){ renderStats(); renderRows(); renderRecent(); setEnabled(); }
+
+  $("#q").addEventListener("input", function(e){ S.q = e.target.value; renderRows(); });
+  $("#filter").addEventListener("change", function(e){ S.filter = e.target.value; renderRows(); });
+  $("#rows").addEventListener("click", function(e){
+    var btn = e.target.closest("[data-act]"); if (!btn) return;
+    var code = btn.closest("tr").dataset.code;
+    var p = S.passes.find(function(x){ return x.code === code; }); if (!p) return;
+    if (btn.dataset.act === "pass") openPass(p);
+    if (btn.dataset.act === "edit" && !S.readOnly) openBuyer(p);
+    if (btn.dataset.act === "pay") {
+      btn.disabled = true;
+      S.db.doc("passes/" + code).update({ paid: !p.paid }).catch(writeFailed).then(function(){ btn.disabled = false; });
+    }
+  });
+
+  /* ---------- Buyer form ---------- */
+  var form = $("#buyerForm");
+  function renderTypeOptions(){
+    var cur = form.type.value;
+    var opts = S.types.map(function(t){ return '<option value="' + esc(t.name) + '">' + esc(t.name) + "</option>"; }).join("");
+    $("#typeSel").innerHTML = opts + '<option value="Other">Other</option>';
+    if (cur) form.type.value = cur;
+  }
+  function lockFields(){
+    var t = S.types.find(function(x){ return x.name === form.type.value; });
+    form.allowed.readOnly = !!t; form.amount.readOnly = !!t;
+  }
+  function applyType(){
+    var t = S.types.find(function(x){ return x.name === form.type.value; });
+    if (t) { form.allowed.value = t.people; form.amount.value = +t.price || 0; }
+    lockFields();
+  }
+  form.type.addEventListener("change", applyType);
+  function openBuyer(p){
+    S.editing = p || null;
+    form.reset(); renderTypeOptions();
+    $("#buyerErr").hidden = true;
+    $("#buyerTitle").textContent = p ? "Edit " + p.code : "Add buyer";
+    $("#buyerSave").textContent = p ? "Save changes" : "Save buyer";
+    var del = $("#delBtn"); del.hidden = !p; del.dataset.armed = ""; del.textContent = "Delete pass";
+    if (p) {
+      form.name.value = p.name || ""; form.phone.value = p.phone || "";
+      if (![].some.call(form.type.options, function(o){ return o.value === p.type; })) {
+        var o = document.createElement("option"); o.value = o.textContent = p.type || "Other"; form.type.appendChild(o);
+      }
+      form.type.value = p.type || "Other";
+      form.allowed.value = p.allowed || 1; form.amount.value = p.amount || 0;
+      form.upi.value = p.upi || ""; form.note.value = p.note || ""; form.paid.checked = !!p.paid;
+      lockFields();
+    } else applyType();
+    $("#buyerDlg").showModal();
+    form.name.focus();
+  }
+  $("#addBtn").addEventListener("click", function(){ openBuyer(null); });
+
+  function genCode(){
+    var A = "23456789ABCDEFGHJKMNPQRSTUVWXYZ", s = "";
+    var r = new Uint32Array(6); crypto.getRandomValues(r);
+    for (var i = 0; i < 6; i++) s += A[r[i] % A.length];
+    return s;
+  }
+  async function newCode(){
+    for (var i = 0; i < 6; i++) {
+      var c = genCode();
+      var snap = await S.db.doc("passes/" + c).get();
+      if (!snap.exists) return c;
+    }
+    throw { code: "unavailable" };
+  }
+  form.addEventListener("submit", async function(e){
+    e.preventDefault();
+    var err = $("#buyerErr");
+    var name = form.name.value.trim();
+    var allowed = parseInt(form.allowed.value, 10);
+    if (!name) { err.textContent = "Add the buyer’s name."; err.hidden = false; return; }
+    if (!(allowed >= 1)) { err.textContent = "Entries must be at least 1."; err.hidden = false; return; }
+    var data = { name: name, phone: form.phone.value.trim(), type: form.type.value, allowed: allowed,
+      amount: Math.max(0, parseInt(form.amount.value, 10) || 0), upi: form.upi.value.trim(),
+      note: form.note.value.trim(), paid: form.paid.checked };
+    var save = $("#buyerSave"); save.disabled = true;
+    try {
+      if (S.editing) {
+        await S.db.doc("passes/" + S.editing.code).update(data);
+        $("#buyerDlg").close();
+      } else {
+        var code = await newCode();
+        var full = Object.assign({}, data, { used: 0, log: [], createdAt: Date.now() });
+        await S.db.doc("passes/" + code).set(full);
+        $("#buyerDlg").close();
+        openPass(Object.assign({ code: code }, full));
+      }
+    } catch (ex) { err.textContent = "That didn’t save. Check your connection and try again."; err.hidden = false; writeFailed(ex); }
+    save.disabled = false;
+  });
+  $("#delBtn").addEventListener("click", async function(){
+    var b = this;
+    if (!b.dataset.armed) { b.dataset.armed = "1"; b.textContent = "Tap again to delete"; return; }
+    try { await S.db.doc("passes/" + S.editing.code).delete(); $("#buyerDlg").close(); } catch (ex) { writeFailed(ex); }
+  });
+  document.querySelectorAll("[data-close]").forEach(function(b){ b.addEventListener("click", function(){ b.closest("dialog").close(); }); });
+
+  /* ---------- Pass types ---------- */
+  function typeRow(t){
+    var d = document.createElement("div"); d.className = "types-row";
+    d.innerHTML = '<label>Name<input class="field" data-k="name" maxlength="24" value="' + esc(t.name) + '"></label>' +
+      '<label>People<input class="field" data-k="people" type="number" min="1" max="50" value="' + esc(t.people) + '"></label>' +
+      '<label>Price ₹<input class="field" data-k="price" type="number" min="0" value="' + esc(t.price) + '"></label>' +
+      '<button type="button" class="btn ghost small" aria-label="Remove type">Remove</button>';
+    d.querySelector("button").addEventListener("click", function(){ d.remove(); });
+    return d;
+  }
+  $("#typesBtn").addEventListener("click", function(){
+    var box = $("#typesRows"); box.innerHTML = "";
+    S.types.forEach(function(t){ box.appendChild(typeRow(t)); });
+    $("#typesDlg").showModal();
+  });
+  $("#addTypeBtn").addEventListener("click", function(){ $("#typesRows").appendChild(typeRow({ name: "", people: 1, price: 0 })); });
+  $("#typesForm").addEventListener("submit", async function(e){
+    e.preventDefault();
+    var types = [].map.call(document.querySelectorAll("#typesRows .types-row"), function(r){
+      return { name: r.querySelector('[data-k="name"]').value.trim(),
+        people: Math.max(1, parseInt(r.querySelector('[data-k="people"]').value, 10) || 1),
+        price: Math.max(0, parseInt(r.querySelector('[data-k="price"]').value, 10) || 0) };
+    }).filter(function(t){ return t.name; });
+    if (!types.length) types = DEFAULT_TYPES.slice();
+    try { await S.db.doc("settings/event").set({ types: types }); $("#typesDlg").close(); } catch (ex) { writeFailed(ex); }
+  });
+
+  /* ---------- Pass image ---------- */
+  var lastCanvas = null, lastPass = null;
+  function drawGhost(x, cx, cy, s, a){
+    x.save(); x.translate(cx, cy); x.scale(s, s); x.globalAlpha = a; x.fillStyle = "#EEF2FF";
+    x.beginPath(); x.moveTo(0, -56); x.bezierCurveTo(-30, -56, -44, -32, -44, -4); x.lineTo(-44, 58);
+    x.lineTo(-29, 46); x.lineTo(-15, 58); x.lineTo(0, 46); x.lineTo(15, 58); x.lineTo(29, 46); x.lineTo(44, 58);
+    x.lineTo(44, -4); x.bezierCurveTo(44, -32, 30, -56, 0, -56); x.closePath(); x.fill();
+    x.globalAlpha = Math.min(1, a * 4); x.fillStyle = "#080303";
+    [[-14, -8], [14, -8]].forEach(function(e){ x.beginPath(); x.ellipse(e[0], e[1], 6, 8, 0, 0, 7); x.fill(); });
+    x.beginPath(); x.ellipse(0, 16, 6, 9, 0, 0, 7); x.fill();
+    x.restore();
+  }
+  async function drawPass(p){
+    try { await Promise.all([document.fonts.load('128px "Creepster"'), document.fonts.load('700 60px "Instrument Sans"'), document.fonts.load('500 40px "Instrument Sans"')]); } catch (e) {}
+    var W = 1080, H = 1350, c = document.createElement("canvas"); c.width = W; c.height = H;
+    var x = c.getContext("2d");
+    x.fillStyle = "#080303"; x.fillRect(0, 0, W, H);
+    var g = x.createRadialGradient(W / 2, 150, 30, W / 2, 150, 700);
+    g.addColorStop(0, "rgba(224,20,31,0.22)"); g.addColorStop(1, "rgba(224,20,31,0)");
+    x.fillStyle = g; x.fillRect(0, 0, W, H);
+    x.textAlign = "center"; x.textBaseline = "alphabetic";
+    x.fillStyle = "#B0060E"; x.fillRect(0, 0, W, 12);
+    [[70, 48], [190, 86], [300, 38], [430, 70], [560, 54], [690, 92], [800, 42], [910, 76], [1020, 50]].forEach(function(d){
+      x.beginPath(); x.moveTo(d[0] - 14, 10);
+      x.bezierCurveTo(d[0] - 10, 10, d[0] - 7, d[1] - 12, d[0] - 7, d[1]);
+      x.arc(d[0], d[1], 7, Math.PI, 0, true);
+      x.bezierCurveTo(d[0] + 7, d[1] - 12, d[0] + 10, 10, d[0] + 14, 10); x.closePath(); x.fill();
+    });
+    x.save(); x.shadowColor = "rgba(224,20,31,0.85)"; x.shadowBlur = 34;
+    x.fillStyle = "#E0141F"; x.font = '128px "Creepster", Georgia, serif'; x.fillText("Andheri Nights", W / 2, 200); x.restore();
+    x.fillStyle = "#EFE6D5"; x.font = '600 46px "Instrument Sans", system-ui, sans-serif'; x.fillText("Halloween party", W / 2, 268);
+    x.fillStyle = "#A797A9"; x.font = '500 34px "Instrument Sans", system-ui, sans-serif'; x.fillText("31 October 2026, 7 PM, Kuhoo, Mehsana", W / 2, 318);
+
+    var box = 560, bx = (W - box) / 2, by = 370;
+    x.fillStyle = "#FFFFFF";
+    if (x.roundRect) { x.beginPath(); x.roundRect(bx, by, box, box, 28); x.fill(); } else x.fillRect(bx, by, box, box);
+    if (typeof qrcode === "function") {
+      var qr = qrcode(0, "M"); qr.addData(QR_PREFIX + p.code); qr.make();
+      var n = qr.getModuleCount(), cell = Math.floor((box - 64) / n), size = cell * n, ox = bx + (box - size) / 2, oy = by + (box - size) / 2;
+      x.fillStyle = "#120A16";
+      for (var r = 0; r < n; r++) for (var col = 0; col < n; col++) if (qr.isDark(r, col)) x.fillRect(ox + col * cell, oy + r * cell, cell, cell);
+    } else {
+      x.fillStyle = "#120A16"; x.font = '700 60px "Instrument Sans", sans-serif'; x.fillText(p.code, W / 2, by + box / 2);
+    }
+    x.fillStyle = "#EFE6D5"; x.font = '700 62px "Instrument Sans", system-ui, sans-serif';
+    var nm = p.name || ""; while (x.measureText(nm).width > W - 140 && nm.length > 4) nm = nm.slice(0, -2) + "…";
+    x.fillText(nm, W / 2, 1036);
+    x.fillStyle = "#A797A9"; x.font = '500 38px "Instrument Sans", system-ui, sans-serif';
+    x.fillText((p.type || "Pass") + " pass, " + p.allowed + (p.allowed > 1 ? " entries" : " entry"), W / 2, 1094);
+    x.fillStyle = "#E0141F"; x.font = '700 76px "Instrument Sans", system-ui, sans-serif';
+    x.fillText(p.code.split("").join(" "), W / 2, 1196);
+    x.fillStyle = "#7E6E82"; x.font = '500 30px "Instrument Sans", system-ui, sans-serif';
+    x.fillText("Show this QR at the gate. Don’t share it, it works once per entry.", W / 2, 1282);
+    return c;
+  }
+  function waNumber(phone){
+    var d = String(phone || "").replace(/\D/g, "");
+    if (d.length === 10) d = "91" + d;
+    if (d.length === 11 && d[0] === "0") d = "91" + d.slice(1);
+    return d;
+  }
+  async function openPass(p){
+    lastPass = p;
+    $("#passTitle").textContent = p.name + "’s pass";
+    $("#passImg").removeAttribute("src");
+    var msg = "Hi " + p.name + ", your Andheri Nights Halloween pass is confirmed 👻\n\n" +
+      "Pass code: " + p.code + "\nType: " + p.type + " (" + p.allowed + (p.allowed > 1 ? " entries" : " entry") + ")\n" +
+      "Date: Sat, 31 Oct 2026, 7 PM\nVenue: Kuhoo, Mehsana\nDress code: red and black, all red, all black, or any role play or costume\n\nShow the QR on your pass at the gate. Keep it to yourself, each entry can be used only once.";
+    $("#waText").value = msg;
+    var num = waNumber(p.phone), wa = $("#waLink");
+    wa.href = (num ? "https://wa.me/" + num : "https://wa.me/") + "?text=" + encodeURIComponent(msg);
+    $("#savePassBtn").hidden = !S.downloads;
+    $("#passDlg").showModal();
+    lastCanvas = await drawPass(p);
+    $("#passImg").src = lastCanvas.toDataURL("image/png");
+  }
+  $("#savePassBtn").addEventListener("click", function(){
+    if (!lastCanvas || !S.downloads) return;
+    var b = this; b.disabled = true;
+    lastCanvas.toBlob(function(blob){
+      S.downloads.save({ filename: "AndheriNights-" + lastPass.code + ".png", data: blob })
+        .then(function(){ b.textContent = "Saved"; })
+        .catch(function(){})
+        .then(function(){ b.disabled = false; setTimeout(function(){ b.textContent = "Save pass image"; }, 2000); });
+    }, "image/png");
+  });
+
+  /* ---------- CSV ---------- */
+  $("#csvBtn").addEventListener("click", function(){
+    if (!S.downloads) return;
+    var cols = ["Pass code", "Name", "Phone", "Type", "Entries allowed", "Entries used", "Amount", "Payment ref", "Payment verified", "Note", "Booked at"];
+    var q = function(v){ v = String(v == null ? "" : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+    var lines = [cols.join(",")].concat(S.passes.slice().sort(function(a, b){ return (a.createdAt || 0) - (b.createdAt || 0); }).map(function(p){
+      return [p.code, p.name, p.phone, p.type, p.allowed, p.used || 0, p.amount || 0, p.upi, p.paid ? "Yes" : "No", p.note,
+        p.createdAt ? new Date(p.createdAt).toLocaleString("en-IN") : ""].map(q).join(",");
+    }));
+    S.downloads.save({ filename: "andheri-nights-passes.csv", data: lines.join("\n") }).catch(function(){});
+  });
+
+  /* ---------- Gate ---------- */
+  var V = $("#verdict");
+  function setVerdict(cls, html){ V.className = "verdict" + (cls ? " " + cls + " flash" : ""); V.innerHTML = html; }
+  function idleVerdict(){
+    S.gateCode = null; S.lastAdmit = null;
+    setVerdict("", '<p class="big" style="color:var(--muted)">Ready</p><p>Scan a guest’s QR or type their pass code. Their name, pass type and entries left will show here.</p>');
+    if (S.stream) S.scanning = true;
+  }
+  function parseCode(raw){
+    var s = String(raw || "").trim().toUpperCase();
+    if (s.indexOf(QR_PREFIX) === 0) s = s.slice(QR_PREFIX.length);
+    s = s.replace(/[^A-Z0-9]/g, "");
+    return s.length >= 4 && s.length <= 12 ? s : "";
+  }
+  function findPass(code){ return S.passes.find(function(p){ return p.code === code; }); }
+  async function lookup(raw){
+    var code = parseCode(raw);
+    if (!code) { setVerdict("bad", '<p class="big">Not a pass</p><p class="meta">That QR isn’t an Andheri Nights pass. Ask for the right one or type the code.</p><div class="row"><button class="btn" data-g="next">Scan next</button></div>'); return; }
+    if (!S.db) return;
+    S.scanning = false;
+    var p = findPass(code);
+    if (!p) { try { var s = await S.db.doc("passes/" + code).get(); if (s.exists) p = Object.assign({ code: code }, s.data()); } catch (e) {} }
+    if (!p) { setVerdict("bad", '<p class="big">No pass</p><p class="meta">Nothing matches ' + esc(code) + '. Check the code letter by letter.</p><div class="row"><button class="btn" data-g="next">Scan next</button></div>'); return; }
+    S.gateCode = code; S.lastAdmit = null;
+    showGatePass(p);
+  }
+  function showGatePass(p){
+    var allowed = +p.allowed || 1, used = +p.used || 0, left = allowed - used;
+    var last = (p.log && p.log.length) ? p.log[p.log.length - 1].t : 0;
+    if (left <= 0) {
+      setVerdict("bad", '<p class="big">Already used</p><p class="who">' + esc(p.name) + '</p><p class="meta">' + esc(p.type) + ", all " + allowed + " entries used" + (last ? ", last at " + timeOf(last) : "") + '.</p><div class="row"><button class="btn" data-g="next">Scan next</button></div>');
+      return;
+    }
+    var btns = "", max = Math.min(left, 6);
+    for (var i = 1; i <= max; i++) btns += '<button class="btn" data-g="in" data-n="' + i + '">Let in ' + i + "</button>";
+    setVerdict("", '<p class="who">' + esc(p.name) + '</p><p class="meta" style="margin:0">' + esc(p.type) + " pass, code " + esc(p.code) + "</p>" +
+      '<div><span class="left">' + left + '</span> <span>of ' + allowed + (allowed > 1 ? " entries" : " entry") + " left</span></div>" +
+      (p.paid ? "" : '<p class="warnline">Payment not verified yet. Check with the organiser before letting them in.</p>') +
+      '<div class="letin">' + btns + '</div><div class="row"><button class="btn ghost" data-g="next">Cancel</button></div>');
+  }
+  async function admit(n){
+    if (S.busy || !S.gateCode) return; S.busy = true;
+    var ref = S.db.doc("passes/" + S.gateCode);
+    try {
+      var lease = null;
+      try { lease = await ref.acquire({ holder: deviceId, ttlMs: 6000 }); } catch (e) {}
+      if (lease && !lease.acquired) { notice("Another gate phone is updating this pass. Scan it again in a few seconds."); S.busy = false; return; }
+      var snap = await ref.get();
+      if (!snap.exists) { S.busy = false; return lookup(S.gateCode); }
+      var d = snap.data(), used = +d.used || 0, allowed = +d.allowed || 1;
+      if (used + n > allowed) { S.busy = false; showGatePass(Object.assign({ code: S.gateCode }, d)); return; }
+      var t = Date.now();
+      var log = (Array.isArray(d.log) ? d.log : []).concat([{ t: t, n: n }]).slice(-40);
+      await ref.update({ used: used + n, log: log, lastEntryAt: t });
+      S.lastAdmit = { code: S.gateCode, n: n, t: t };
+      var left = allowed - used - n;
+      setVerdict("ok", '<p class="big">' + n + (n > 1 ? " in" : " in") + '</p><p class="who">' + esc(d.name) + '</p><p class="meta">' +
+        (left > 0 ? left + (left > 1 ? " entries" : " entry") + " still left on this pass." : "Pass fully used.") +
+        '</p><div class="row"><button class="btn" data-g="next">Scan next</button><button class="btn ghost" data-g="undo">Undo</button></div>');
+    } catch (ex) { writeFailed(ex); }
+    S.busy = false;
+  }
+  async function undo(){
+    var a = S.lastAdmit; if (!a || S.busy) return; S.busy = true;
+    try {
+      var ref = S.db.doc("passes/" + a.code), snap = await ref.get();
+      if (snap.exists) {
+        var d = snap.data();
+        var log = (d.log || []).filter(function(l){ return l.t !== a.t; });
+        await ref.update({ used: Math.max(0, (+d.used || 0) - a.n), log: log });
+        S.lastAdmit = null; S.busy = false;
+        showGatePass(Object.assign({ code: a.code }, d, { used: Math.max(0, (+d.used || 0) - a.n), log: log }));
+        return;
+      }
+    } catch (ex) { writeFailed(ex); }
+    S.busy = false;
+  }
+  V.addEventListener("click", function(e){
+    var b = e.target.closest("button[data-g]"); if (!b) return;
+    if (b.dataset.g === "next") idleVerdict();
+    if (b.dataset.g === "in") admit(parseInt(b.dataset.n, 10));
+    if (b.dataset.g === "undo") undo();
+  });
+  $("#manual").addEventListener("submit", function(e){ e.preventDefault(); var v = $("#codeIn").value; $("#codeIn").value = ""; lookup(v); });
+
+  function renderRecent(){
+    var items = [];
+    S.passes.forEach(function(p){ (p.log || []).forEach(function(l){ items.push({ t: l.t, n: l.n, name: p.name }); }); });
+    items.sort(function(a, b){ return b.t - a.t; });
+    $("#recent").innerHTML = items.length ? items.slice(0, 8).map(function(i){
+      return '<li><span class="t">' + timeOf(i.t) + "</span><span>" + esc(i.name) + '</span><span class="n">+' + i.n + "</span></li>";
+    }).join("") : '<li><span class="sub">Nobody has come in yet.</span></li>';
+  }
+
+  /* Camera scanning */
+  var video = $("#video"), sc = $("#scanCanvas"), sctx = sc.getContext("2d", { willReadFrequently: true });
+  async function startCam(){
+    if (typeof jsQR !== "function") { $("#camoff").firstElementChild.textContent = "The QR reader didn’t load. Type the pass code below instead."; return; }
+    try {
+      S.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false });
+      video.srcObject = S.stream; await video.play();
+      video.hidden = false; $("#frame").hidden = false; $("#camoff").hidden = true;
+      S.scanning = !S.gateCode;
+      requestAnimationFrame(tick);
+    } catch (e) {
+      $("#camoff").firstElementChild.textContent = "The camera isn’t available here. Allow camera access, or type the pass code below.";
+    }
+  }
+  function stopCam(){
+    S.scanning = false;
+    if (S.stream) { S.stream.getTracks().forEach(function(t){ t.stop(); }); S.stream = null; }
+    video.hidden = true; $("#frame").hidden = true; $("#camoff").hidden = false;
+  }
+  var lastScan = "", lastScanAt = 0;
+  function tick(){
+    if (!S.stream) return;
+    if (S.scanning && video.readyState >= 2) {
+      var w = video.videoWidth, h = video.videoHeight, k = Math.min(1, 640 / Math.max(w, h));
+      sc.width = Math.round(w * k); sc.height = Math.round(h * k);
+      sctx.drawImage(video, 0, 0, sc.width, sc.height);
+      var img = sctx.getImageData(0, 0, sc.width, sc.height);
+      var hit = jsQR(img.data, img.width, img.height, { inversionAttempts: "dontInvert" });
+      if (hit && hit.data) {
+        var now = Date.now();
+        if (hit.data !== lastScan || now - lastScanAt > 3000) { lastScan = hit.data; lastScanAt = now; S.scanning = false; lookup(hit.data); }
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+  $("#camBtn").addEventListener("click", startCam);
+
+  /* ---------- Google Sheet sync ---------- */
+  var SHEET = { id: "1k_epkQQmgT4yiGiPwJbrr7L-kSzBFa4_Av6B2r6QJ4o", pub: "1cAnt7xpVQ9-gB4Xe8OTfYe8q3qnL7Oso_WykYiyHN5A", server: "Google Sheets" };
+  var Y = { mcp: null, allowed: false, broken: false, timer: null, running: false, pending: false, lastJson: null, lastCount: -1, lastAt: 0 };
+  function syncStatus(msg, btnLabel){
+    $("#syncText").textContent = msg;
+    var b = $("#syncBtn"); b.hidden = !btnLabel; if (btnLabel) b.textContent = btnLabel;
+  }
+  function tx(v){ v = String(v == null ? "" : v); return v ? "'" + v : ""; }
+  function stamp(t){ return t ? tx(new Date(t).toLocaleString("en-IN", { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" })) : ""; }
+  function sheetRows(){
+    return S.passes.slice().sort(function(a, b){ return (a.createdAt || 0) - (b.createdAt || 0); }).map(function(p){
+      var last = p.lastEntryAt || ((p.log && p.log.length) ? p.log[p.log.length - 1].t : 0);
+      return [tx(p.code), tx(p.name), tx(p.phone), tx(p.type), +p.allowed || 1, +p.used || 0, +p.amount || 0,
+        tx(p.upi), p.paid ? "Yes" : "No", tx(p.note), stamp(p.createdAt), (+p.used || 0) > 0 ? stamp(last) : ""];
+    });
+  }
+  function maskName(n){
+    var w = String(n || "").trim().split(/\s+/);
+    if (!w[0]) return "";
+    return w.length > 1 ? w[0] + " " + w[w.length - 1].charAt(0).toUpperCase() + "." : w[0];
+  }
+  function maskPhone(p){ var d = String(p || "").replace(/\D/g, ""); return d.length >= 4 ? "******" + d.slice(-4) : ""; }
+  function pubRows(){
+    return S.passes.slice().sort(function(a, b){ return (a.createdAt || 0) - (b.createdAt || 0); }).map(function(p, i){
+      var used = +p.used || 0, allowed = +p.allowed || 1;
+      return [i + 1, tx(maskName(p.name)), tx(maskPhone(p.phone)), tx("…" + p.code.slice(-3)), tx(p.type),
+        p.paid ? "Confirmed" : "Payment pending", used > 0 ? tx(used + " of " + allowed + " inside") : "Not yet"];
+    });
+  }
+  function scheduleSync(delay){
+    if (!Y.mcp || !Y.allowed || Y.broken || !S.db) return;
+    clearTimeout(Y.timer);
+    var wait = Math.max(delay == null ? 6000 : delay, Y.lastAt + 20000 - Date.now(), 0);
+    Y.timer = setTimeout(function(){ runSync(false); }, wait);
+  }
+  async function runSync(force){
+    if (!Y.mcp || !S.db) return;
+    if (Y.running) { Y.pending = true; return; }
+    var rows = sheetRows(), pub = pubRows(), json = JSON.stringify([rows, pub]);
+    if (!force && json === Y.lastJson) return;
+    Y.running = true;
+    try {
+      var lease = null;
+      try { lease = await S.db.doc("sync/sheet").acquire({ holder: deviceId, ttlMs: 30000 }); } catch (e) {}
+      if (lease && !lease.acquired) {
+        Y.running = false; syncStatus("Another device is updating the Google Sheet right now.", false); scheduleSync(30000); return;
+      }
+      syncStatus("Updating Google Sheet…", false);
+      if (rows.length) {
+        await Y.mcp.callTool(SHEET.server, "update_values",
+          { spreadsheetId: SHEET.id, range: "'Passes'!A2:L" + (rows.length + 1), values: rows }, { cache: false });
+      }
+      if (pub.length) {
+        await Y.mcp.callTool(SHEET.server, "update_values",
+          { spreadsheetId: SHEET.pub, range: "'Guest list'!A2:G" + (pub.length + 1), values: pub }, { cache: false });
+      }
+      if (Y.lastCount < 0 || rows.length < Y.lastCount) {
+        await Y.mcp.callTool(SHEET.server, "batch_clear_values",
+          { spreadsheetId: SHEET.id, ranges: ["'Passes'!A" + (rows.length + 2) + ":L"] }, { cache: false });
+        await Y.mcp.callTool(SHEET.server, "batch_clear_values",
+          { spreadsheetId: SHEET.pub, ranges: ["'Guest list'!A" + (pub.length + 2) + ":G"] }, { cache: false });
+      }
+      Y.lastJson = json; Y.lastCount = rows.length; Y.lastAt = Date.now();
+      syncStatus("Google Sheet is up to date (" + rows.length + (rows.length === 1 ? " pass" : " passes") + ", synced " + timeOf(Y.lastAt) + ").", false);
+    } catch (e) { onSyncError(e); }
+    Y.running = false;
+    if (Y.pending) { Y.pending = false; scheduleSync(); }
+  }
+  function onSyncError(e){
+    var c = e && e.code; Y.lastAt = Date.now();
+    if (c === "needs_reauth") { Y.broken = true; syncStatus("Google Sheets needs reconnecting. Reconnect it in claude.ai Settings → Connectors, then tap Sync now.", "Sync now"); }
+    else if (c === "server_not_connected" || c === "selection_required") { Y.broken = true; syncStatus("Add the Google Sheets connector in claude.ai Settings → Connectors to update the sheet from this device.", "Sync now"); }
+    else if (c === "not_in_manifest" || c === "approval_required") { Y.allowed = false; syncStatus("The sheet updates once you allow Google Sheets for this page.", "Connect Google Sheet"); }
+    else if (c === "blocked_by_policy") { Y.broken = true; syncStatus("Google Sheets is blocked for this account. Use Export CSV instead.", false); }
+    else if (c === "tool_error" && !/quota|rate|limit/i.test(String(e.message || ""))) {
+      Y.broken = true; syncStatus("This Google account can’t write to the pass sheet. Passes are still saved here.", "Sync now");
+    } else { syncStatus("Couldn’t update the Google Sheet just now. Trying again in a minute.", "Sync now"); scheduleSync(60000); }
+  }
+  $("#syncBtn").addEventListener("click", function(){
+    if (!Y.mcp) return;
+    Y.broken = false; Y.allowed = true; clearTimeout(Y.timer); runSync(true);
+  });
+
+  /* ---------- Boot ---------- */
+  showView(location.hash.slice(1) === "gate" ? "gate" : "passes");
+  renderAll(); renderTypeOptions();
+
+  var use = (window.claude && typeof window.claude.use === "function") ? function(n){ return window.claude.use(n); } : function(){ return Promise.resolve(null); };
+  use("downloads").then(function(d){ S.downloads = d; setEnabled(); });
+  use("mcp").then(async function(m){
+    if (!m) { syncStatus("Google Sheet sync isn’t available in this view. Use Export CSV instead.", false); return; }
+    Y.mcp = m;
+    var st = "prompt";
+    try { var perms = await use("permissions"); if (perms) st = await perms.state("mcp:" + SHEET.server).catch(function(){ return "unavailable"; }); } catch (e) {}
+    if (st === "granted") { Y.allowed = true; syncStatus("Connected to the Google Sheet.", "Sync now"); scheduleSync(1500); }
+    else if (st === "denied") syncStatus("Google Sheets is switched off for this page. Turn it on in the page’s permissions to keep the sheet updated.", false);
+    else syncStatus("Connect the Google Sheet to copy every pass into it automatically.", "Connect Google Sheet");
+  });
+  use("db").then(function(db){
+    if (!db) { notice("Passes can’t load in this view. Open this page on claude.ai while signed in."); return; }
+    S.db = db; notice(""); setEnabled();
+    db.collection("passes").onSnapshot(function(snap){
+      S.passes = snap.docs.map(function(d){ return Object.assign({}, d.data(), { code: d.id }); });
+      renderAll();
+      scheduleSync();
+      if (S.gateCode && !S.lastAdmit && !S.busy) { var p = findPass(S.gateCode); if (p && !V.classList.contains("bad")) showGatePass(p); }
+    }, function(){ notice("Passes stopped updating. Reload the page to reconnect."); });
+    db.doc("settings/event").onSnapshot(function(s){
+      var t = s.exists && s.data().types;
+      S.types = Array.isArray(t) && t.length ? t : DEFAULT_TYPES.slice();
+      renderTypeOptions();
+    }, function(){});
+  });
+})();
+</script>
+</body>
+</html>
